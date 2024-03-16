@@ -53,8 +53,19 @@ class _FeedbackPageState extends State<FeedbackPage> {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
+      flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.secondary,
+              ],
+            ),
+          ),
+        ),
       title: Text('User Feedback'),
-      backgroundColor: Colors.blue,
     ),
     body: Padding(
       padding: EdgeInsets.all(30),
@@ -67,7 +78,7 @@ Widget build(BuildContext context) {
               Icon(
                 Icons.feedback,
                 size: 50,
-                color: Colors.blue,
+                color: Color.fromRGBO(13, 206, 158, 1),
               ),
               SizedBox(width: 10),
               Text(
