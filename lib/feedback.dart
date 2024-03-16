@@ -130,7 +130,7 @@ Widget build(BuildContext context) {
             child: ElevatedButton(
               onPressed: _isSubmitting ? null : _submitFeedback,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(13, 206, 158, 1)),
                 foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                   EdgeInsets.symmetric(horizontal: 24, vertical: 12),

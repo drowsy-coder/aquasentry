@@ -6,7 +6,7 @@ class ContactPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Contact Us'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromRGBO(13, 206, 158, 1),
       ),
       body: Center(
         child: Column(
@@ -29,7 +29,7 @@ class ContactPage extends StatelessWidget {
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: Colors.blue,
+            color: Color.fromRGBO(13, 206, 158, 1),
           ),
         ),
         SizedBox(height: 10),
@@ -51,6 +51,7 @@ class ContactPage extends StatelessWidget {
           context,
           icon: Icons.email,
           label: 'Email',
+          
           onPressed: () => _sendEmail(context),
         ),
         SizedBox(height: 20),
@@ -75,8 +76,8 @@ class ContactPage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         decoration: BoxDecoration(
-          color: Colors.blue.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(10),
+          color: Color.fromRGBO(13, 206, 158, 1),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,14 +85,14 @@ class ContactPage extends StatelessWidget {
             Icon(
               icon,
               size: 36,
-              color: Colors.blue,
+              color: Colors.black,
             ),
             SizedBox(width: 20),
             Text(
               label,
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.blue,
+                color: Colors.black,
               ),
             ),
           ],
