@@ -70,6 +70,7 @@ class _HomiePageState extends State<HomiePage> {
       initialRoute: '/',
       routes: {
         '/': (context) => ChlorineLevelScreen(),
+        '/graph': (context) => GraphScreen(),
       },
     );
   }
@@ -82,16 +83,12 @@ class ChlorineLevelScreen extends StatefulWidget {
   _ChlorineLevelScreenState createState() => _ChlorineLevelScreenState();
 }
 
-class _ChlorineLevelScreenState extends State<ChlorineLevelScreen>
-    with SingleTickerProviderStateMixin {
+class _ChlorineLevelScreenState extends State<ChlorineLevelScreen> with SingleTickerProviderStateMixin {
   bool isDarkMode = false;
 
-   late double _phValue;
-  final DatabaseReference _phDataRef = FirebaseDatabase.instance
-      .reference()
-      .child('ph_data')
-      .child('latest')
-      .child('pH');
+  late double _phValue;
+  final DatabaseReference _phDataRef =
+      FirebaseDatabase.instance.reference().child('ph_data').child('latest').child('pH');
 
   @override
   void initState() {
@@ -109,8 +106,6 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen>
       print('Error fetching pH value: $error');
     });
   }
-
-    
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +149,7 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen>
                         'Live Chlorine Level:',
                         style: Theme.of(context).textTheme.headline6,
                       ),
-                      const SizedBox(height:30),
+                      const SizedBox(height: 30),
                       Text(
                         'pH Value: $_phValue',
                         style: TextStyle(
@@ -165,22 +160,22 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen>
                       ),
                       ElevatedButton(
                         onPressed: () {
-                           Navigator.pushNamed(context, '/graph', arguments: _phValue);
+                          Navigator.pushNamed(context, '/graph');
                         },
                         child: Text('View Graph'),
                       ),
+                      SizedBox(height: 20),
+                      Text(
+                        ' (7.2) - (7.6): Perfect down to the last minute Atom\n(5) - (7.2) or (7.6) - (8): Itty bitty issue\n(< 5) or (> 8): I am the Danger',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   ),
-                ),
-                 const SizedBox(height: 20),
-                const Text(
-                  'pH level 7.2 - 7.6: Perfect down to the last minute Atom\n5 - 7.2 or 7.6 - 8: Itty bitty issue\n< 5 or > 8: I am the Danger',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 231, 220, 220),
-                  ),
-                  textAlign: TextAlign.center,
                 ),
               ],
             ),
@@ -191,31 +186,31 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen>
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Theme.of(context).colorScheme.primary,
-                        Theme.of(context).colorScheme.secondary,
-                      ],
-                    ),
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.secondary,
+              ],
+            ),
           ),
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-               Padding(
-                 padding: const EdgeInsets.only(top:100,left:50,bottom: 20),
-                 child: Text(
-                    'User Feedback',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
+              Padding(
+                padding: const EdgeInsets.only(top: 100, left: 50, bottom: 20),
+                child: Text(
+                  'User Feedback',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
                   ),
-               ),
-               Padding(
-                 padding: const EdgeInsets.only(bottom: 20),
-                 child: Icon(Icons.person,size:80),
-               ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Icon(Icons.person, size: 80),
+              ),
               ListTile(
                 title: const Text(
                   'Give Feedback',
@@ -226,8 +221,7 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          FeedbackPage(), // Navigate to the FeedbackPage
+                      builder: (context) => FeedbackPage(), // Navigate to the FeedbackPage
                     ),
                   );
                 },
@@ -242,8 +236,7 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          RatePage(), // Navigate to the RatePage
+                      builder: (context) => RatePage(), // Navigate to the RatePage
                     ),
                   );
                 },
@@ -258,8 +251,7 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          ContactPage(), // Navigate to the ContactPage
+                      builder: (context) => ContactPage(), // Navigate to the ContactPage
                     ),
                   );
                 },
@@ -270,6 +262,4 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen>
       ),
     );
   }
-
-
 }
