@@ -70,7 +70,6 @@ class _HomiePageState extends State<HomiePage> {
       initialRoute: '/',
       routes: {
         '/': (context) => ChlorineLevelScreen(),
-        '/graph': (context) => GraphScreen(),
       },
     );
   }
@@ -166,12 +165,22 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen>
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/graph');
+                           Navigator.pushNamed(context, '/graph', arguments: _phValue);
                         },
                         child: Text('View Graph'),
                       ),
                     ],
                   ),
+                ),
+                 const SizedBox(height: 20),
+                const Text(
+                  'pH level 7.2 - 7.6: Perfect down to the last minute Atom\n5 - 7.2 or 7.6 - 8: Itty bitty issue\n< 5 or > 8: I am the Danger',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 231, 220, 220),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
