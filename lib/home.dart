@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hackathon1/contact.dart';
 import 'package:flutter_hackathon1/feedback.dart';
 import 'package:flutter_hackathon1/graph.dart';
+import 'package:flutter_hackathon1/map.dart';
 import 'package:flutter_hackathon1/rate.dart';
+import 'package:intl/intl.dart';
 
 class HomiePage extends StatefulWidget {
   static ThemeMode themeMode = ThemeMode.system;
@@ -68,121 +70,74 @@ class _HomiePageState extends State<HomiePage> {
       themeMode: HomiePage.currentThemeMode,
       initialRoute: '/',
       routes: {
-        '/': (context) => ChlorineLevelScreen(),
+        '/': (context) => GarbageLevelScreen(),
         '/graph': (context) => GraphScreen(),
       },
     );
   }
 }
 
-// ... rest of the code for ChlorineLevelScreen ...
-
-class ChlorineLevelScreen extends StatefulWidget {
+class GarbageLevelScreen extends StatefulWidget {
   @override
-  _ChlorineLevelScreenState createState() => _ChlorineLevelScreenState();
+  _GarbageLevelScreenState createState() => _GarbageLevelScreenState();
 }
 
-class _ChlorineLevelScreenState extends State<ChlorineLevelScreen> with SingleTickerProviderStateMixin {
-  bool isDarkMode = false;
+class _GarbageLevelScreenState extends State<GarbageLevelScreen> {
+  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref('gb_value/latest');
 
-  late double _phValue;
-  final DatabaseReference _phDataRef =
-      FirebaseDatabase.instance.reference().child('ph_data').child('latest').child('pH');
+  Map<String, dynamic> garbageData = {};
 
   @override
   void initState() {
     super.initState();
-    _phValue = 0.0; // Initialize pH value
-    _phDataRef.onValue.listen((event) {
-      if (event.snapshot.value != null) {
-        setState(() {
-          _phValue = double.parse(event.snapshot.value.toString());
-        });
-      } else {
-        print('Snapshot value is null');
-      }
-    }, onError: (error) {
-      print('Error fetching pH value: $error');
+    _databaseReference.onValue.listen((event) {
+      final data = event.snapshot.value as Map<dynamic, dynamic>;
+      setState(() {
+        garbageData = {
+          "gb": data["gb"],
+          "timestamp": data["timestamp"],
+        };
+      });
     });
+  }
+
+  String _formatTimestamp(int timestamp) {
+    var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    return DateFormat('yyyy-MM-dd – kk:mm').format(date);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chlorine Monitor'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Text('Garbage Level Indicator', style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.grey,
       ),
-      body: Container(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        child: Center(
-          child: FadeTransition(
-            opacity: kAlwaysCompleteAnimation,
+      body: Center(
+        child: Card(
+          color: Colors.black,
+          margin: EdgeInsets.all(8.0),
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Theme.of(context).colorScheme.primary,
-                        Theme.of(context).colorScheme.secondary,
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Live Chlorine Level:',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      const SizedBox(height: 30),
-                      Text(
-                        'pH Value: $_phValue',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/graph');
-                        },
-                        child: Text('View Graph'),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        ' (7.2) - (7.6): Perfect down to the last minute Atom\n(5) - (7.2) or (7.6) - (10): Itty bitty issue\n(< 5) or (> 10): I am the Danger',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'Garbage Level: ${garbageData["gb"] ?? "Loading..."}',
+                  style: TextStyle(fontSize: 24),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Last Updated: ${garbageData["timestamp"] != null ? _formatTimestamp(garbageData["timestamp"]) : "Loading..."}',
+                  style: TextStyle(fontSize: 18),
                 ),
               ],
             ),
           ),
         ),
       ),
-      drawer: Drawer(
-        child: Container(
+    drawer: Drawer(
+       child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -212,7 +167,7 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen> with SingleTi
               ),
               ListTile(
                 title: const Text(
-                  'Give Feedback',
+                  'Map',
                   style: TextStyle(color: Colors.white),
                 ),
                 onTap: () {
@@ -220,7 +175,7 @@ class _ChlorineLevelScreenState extends State<ChlorineLevelScreen> with SingleTi
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FeedbackPage(), // Navigate to the FeedbackPage
+                      builder: (context) => VITMap(), // Navigate to the FeedbackPage
                     ),
                   );
                 },

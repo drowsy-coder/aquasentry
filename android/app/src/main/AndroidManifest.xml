@@ -9,6 +9,9 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDHn9R1eETWWEtveTBgBEe74cy9htIv9oM"/>
+
         <!-- Add Firebase configurations here -->
 
         <activity
